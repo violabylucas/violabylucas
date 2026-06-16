@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>viola by lucas</title>
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/landing.css" />
+  <link rel="stylesheet" href="css/ascii-grid.css" />
+  <link rel="stylesheet" href="css/ascii-mark.css" />
+  <link rel="stylesheet" href="css/ascii-box.css" />
+
+  <script src="js/ascii-grid.js" defer></script>
+  <script src="js/ascii-mark.js" defer></script>
+  <script src="js/ascii-box.js" defer></script>
+  <script src="js/landing.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <main id="main" class="landing">
+    <div class="landing__inner">
+      <section class="landing__mark-wrap" aria-label="ASCII mark">
+        <div id="ascii-mark" class="ascii-mark" data-ascii-src="data/landing-mark.json" data-ascii-src-mobile="data/landing-mark-mobile.json"></div>
+      </section>
+
+      <nav class="landing__nav" aria-label="Primary navigation">
+        <a href="projects.html" id="projects-box" class="ascii-nav-box" aria-label="Projects"></a>
+        <a href="about.html" id="about-box" class="ascii-nav-box" aria-label="About"></a>
+      </nav>
+    </div>
+  </main>
+</body>
+</html>

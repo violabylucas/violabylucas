@@ -1,0 +1,24 @@
+.ascii-mark {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  contain: content;
+}
+
+.ascii-mark .ascii-grid {
+  --ascii-font-size: clamp(0.75rem, 1.1vw, 1rem);
+  --ascii-cell-width: 0.78ch;
+  --ascii-color: rgba(255, 255, 255, 0.699);
+  --ascii-space-opacity: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 0.25rem;
+  contain: content;
+}
+
+@media (max-width: 760px) {
+  .ascii-mark .ascii-grid {
+    --ascii-font-size: 0.62rem;
+    --ascii-cell-width: 0.72ch;
+  }
+}

@@ -1,0 +1,52 @@
+.ascii-grid {
+  display: inline-grid;
+  gap: 0;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  user-select: none;
+}
+
+.ascii-grid__row {
+  display: flex;
+  gap: 0;
+  line-height: 1;
+}
+
+.ascii-grid__cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ascii-cell-width, 0.72ch);
+  height: 1em;
+  line-height: 1;
+  font-size: var(--ascii-font-size, 1rem);
+  color: var(--ascii-color, rgba(255, 255, 255, 0.9));
+  opacity: var(--ascii-opacity, 1);
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition:
+    color var(--transition-fast),
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.ascii-grid__cell.is-space {
+  opacity: var(--ascii-space-opacity, 0);
+}
+
+.ascii-grid__cell.is-flipping {
+  animation: ascii-cell-flip 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes ascii-cell-flip {
+  0% {
+    transform: rotateY(0deg) scaleX(1);
+  }
+  50% {
+    transform: rotateY(90deg) scaleX(0.55);
+  }
+  100% {
+    transform: rotateY(180deg) scaleX(1);
+  }
+}
