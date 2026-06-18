@@ -1,17 +1,17 @@
 :root {
-  --color-bg: #000000;
-  --color-fg: #ffffff;
+  --color-bg: #000;
+  --color-fg: #f2f2f2;
   --color-muted: rgba(255, 255, 255, 0.58);
-  --color-line: rgba(255, 255, 255, 0.2);
-  --color-line-strong: rgba(255, 255, 255, 0.9);
+  --color-line: rgba(255, 255, 255, 0.18);
+  --line-height: 19px;
+  --font-size: 16px;
+  --font-size-mobile: 13px;
+  --line-height-mobile: 16px;
   --font-mono: "SFMono-Regular", "Cascadia Code", "Fira Code", Consolas, "Liberation Mono", Menlo, monospace;
   --transition-fast: 180ms cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-slow: 360ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
@@ -20,24 +20,24 @@ html {
   text-size-adjust: 100%;
 }
 
+html,
 body {
   margin: 0;
-  min-height: 100vh;
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
   background: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-mono);
+  font-size: var(--font-size);
+  line-height: var(--line-height);
 }
 
 a {
   color: inherit;
   text-decoration: none;
-}
-
-img,
-svg,
-canvas {
-  display: block;
-  max-width: 100%;
 }
 
 button,
@@ -48,20 +48,11 @@ select {
   color: inherit;
 }
 
-.skip-link {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  z-index: 20;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--color-fg);
-  background: var(--color-fg);
-  color: var(--color-bg);
-  transform: translateY(-220%);
-}
-
-.skip-link:focus {
-  transform: translateY(0);
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
 }
 
 :focus-visible {
@@ -69,37 +60,18 @@ select {
   outline-offset: 4px;
 }
 
-.subpage {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 2rem;
-}
-
-.subpage__content {
-  display: grid;
-  place-items: center;
-  min-height: 40vh;
-}
-
-.subpage__content h1 {
-  margin: 0;
-  font-size: clamp(1.5rem, 4vw, 3rem);
-  font-weight: 400;
-  text-transform: lowercase;
-}
-
-.back-link {
-  position: fixed;
-  top: 1.5rem;
-  left: 1.5rem;
-  border: 1px solid var(--color-line-strong);
-  padding: 0.8rem 1.2rem;
-  transition: background-color var(--transition-fast), color var(--transition-fast);
-}
-
-.back-link:hover,
-.back-link:focus-visible {
+.skip-link {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 30;
+  padding: 0.5rem 0.75rem;
   background: var(--color-fg);
   color: var(--color-bg);
+  transform: translateY(-220%);
+  transition: transform var(--transition-fast);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
 }

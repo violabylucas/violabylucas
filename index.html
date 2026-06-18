@@ -1,35 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>viola by lucas</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lucas Grant</title>
+    <link rel="stylesheet" href="./css/base.css" />
+    <link rel="stylesheet" href="./css/site.css" />
+    <link rel="stylesheet" href="./css/landing.css" />
+  </head>
+  <body data-page="landing">
+    <a class="skip-link" href="#source">Skip to content</a>
 
-  <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/landing.css" />
-  <link rel="stylesheet" href="css/ascii-grid.css" />
-  <link rel="stylesheet" href="css/ascii-mark.css" />
-  <link rel="stylesheet" href="css/ascii-box.css" />
+    <main class="source" id="source">
+      <div><a href="./projects.html">projects</a></div>
+      <div><a href="./about.html">aboutMe</a></div>
+    </main>
 
-  <script src="js/ascii-grid.js" defer></script>
-  <script src="js/ascii-mark.js" defer></script>
-  <script src="js/ascii-box.js" defer></script>
-  <script src="js/landing.js" defer></script>
-</head>
-<body>
-  <a class="skip-link" href="#main">Skip to content</a>
+    <pre class="ascii-screen" id="ascii-screen" aria-hidden="true"></pre>
 
-  <main id="main" class="landing">
-    <div class="landing__inner">
-      <section class="landing__mark-wrap" aria-label="ASCII mark">
-        <div id="ascii-mark" class="ascii-mark" data-ascii-src="data/landing-mark.json" data-ascii-src-mobile="data/landing-mark-mobile.json"></div>
-      </section>
-
-      <nav class="landing__nav" aria-label="Primary navigation">
-        <a href="projects.html" id="projects-box" class="ascii-nav-box" aria-label="Projects"></a>
-        <a href="about.html" id="about-box" class="ascii-nav-box" aria-label="About"></a>
-      </nav>
-    </div>
-  </main>
-</body>
+    <script type="module" src="./js/app.js"></script>
+  </body>
 </html>

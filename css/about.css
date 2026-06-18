@@ -1,3 +1,11 @@
-.subpage__content {
-  min-width: min(100%, 40rem);
+body[data-page="about"] {
+  --font-size: 15px;
+  --line-height: 19px;
+}
+
+@media (max-width: 760px) {
+  body[data-page="about"] {
+    --font-size: 12.5px;
+    --line-height: 16px;
+  }
 }
