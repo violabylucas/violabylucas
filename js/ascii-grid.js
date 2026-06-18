@@ -118,17 +118,57 @@
   }
 
   function attachRegionHover(instance, radius = 2) {
-    if (!instance) return;
+  if (!instance) return;
 
-    instance.grid.addEventListener("pointerover", (event) => {
-      const cell = event.target.closest(".ascii-grid__cell");
-      if (!cell) return;
+  let touchActive = false;
+  let lastKey = "";
 
-      const row = Number(cell.dataset.row);
-      const col = Number(cell.dataset.col);
-      instance.flipRegion(row, col, radius);
-    });
-  }
+  const triggerCell = (cell) => {
+    if (!cell) return;
+
+    const row = Number(cell.dataset.row);
+    const col = Number(cell.dataset.col);
+    const key = `${row}:${col}`;
+
+    if (key === lastKey) return;
+    lastKey = key;
+    instance.flipRegion(row, col, radius);
+  };
+
+  instance.grid.addEventListener("pointerover", (event) => {
+    if (event.pointerType === "touch") return;
+
+    const cell = event.target.closest(".ascii-grid__cell");
+    if (!cell) return;
+    triggerCell(cell);
+  });
+
+  instance.grid.addEventListener("pointerdown", (event) => {
+    if (event.pointerType !== "touch") return;
+
+    touchActive = true;
+    lastKey = "";
+
+    const cell = document.elementFromPoint(event.clientX, event.clientY)?.closest(".ascii-grid__cell");
+    triggerCell(cell);
+  });
+
+  instance.grid.addEventListener("pointermove", (event) => {
+    if (!touchActive || event.pointerType !== "touch") return;
+
+    const cell = document.elementFromPoint(event.clientX, event.clientY)?.closest(".ascii-grid__cell");
+    triggerCell(cell);
+  });
+
+  const endTouch = () => {
+    touchActive = false;
+    lastKey = "";
+  };
+
+  instance.grid.addEventListener("pointerup", endTouch);
+  instance.grid.addEventListener("pointercancel", endTouch);
+  instance.grid.addEventListener("pointerleave", endTouch);
+}
 
   function attachWaveHover(instance, filterFn = null, stagger = 10) {
     if (!instance) return;

@@ -16,6 +16,16 @@
   contain: content;
 }
 
+.ascii-mark .ascii-grid {
+  touch-action: none;
+}
+
+.ascii-mark .ascii-grid,
+.ascii-mark .ascii-grid__cell {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 @media (max-width: 760px) {
   .ascii-mark .ascii-grid {
     --ascii-font-size: 0.62rem;
