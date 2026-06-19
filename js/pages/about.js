@@ -28,7 +28,7 @@ const ABOUT_LAYOUT = {
   mobile: {
     textMaxWidth: 34,
     textOffsetCols: 0,
-    textOffsetRows: -4,
+    textOffsetRows: -8,
     objectAnchorText: "back",
     objectOffsetXCols: 0,
     objectOffsetYRows: 2,
