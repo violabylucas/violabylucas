@@ -75,3 +75,13 @@ canvas {
 .skip-link:focus {
   transform: translateY(0);
 }
+
+a,
+button {
+  touch-action: manipulation;
+}
+
+html.touch-ui a,
+html.touch-ui button {
+  -webkit-tap-highlight-color: transparent;
+}

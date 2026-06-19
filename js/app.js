@@ -15,8 +15,11 @@ const RETURN_TO_LANDING_KEY = "violabylucas-return-to-landing";
 
 const TOUCH_TAP_THRESHOLD_PX = 12;
 const NAVIGATION_UNLOCK_MS = 400;
+const TOUCH_PRESS_EFFECT_MS = 180;
+const TOUCH_NAV_DELAY_MS = 85;
 
 let navigationLocked = false;
+let touchPressCleanupTimeout = 0;
 
 const LOADER_DESKTOP = String.raw`
      ██╗   ██╗██╗ ██████╗ ██╗      █████╗    ██████╗ ██╗   ██╗   ██╗     ██╗   ██╗ ██████╗ █████╗ ███████╗
@@ -115,12 +118,37 @@ function shouldRunPreloader(page) {
   return !hasSeenPreloader();
 }
 
-function navigateToLink(link) {
-  if (!link || navigationLocked) return;
+function updateInputModeClass() {
+  const isTouchUI =
+    window.matchMedia("(hover: none), (pointer: coarse)").matches;
 
-  navigationLocked = true;
+  document.documentElement.classList.toggle("touch-ui", isTouchUI);
 
+  if (!isTouchUI) {
+    delete document.documentElement.dataset.touchPressedUntil;
+  }
+}
+
+function triggerTouchPressFeedback() {
+  const root = document.documentElement;
+  const until = performance.now() + TOUCH_PRESS_EFFECT_MS;
+  root.dataset.touchPressedUntil = String(until);
+
+  if (touchPressCleanupTimeout) {
+    window.clearTimeout(touchPressCleanupTimeout);
+  }
+
+  touchPressCleanupTimeout = window.setTimeout(() => {
+    const currentUntil = Number(root.dataset.touchPressedUntil || 0);
+    if (currentUntil <= performance.now()) {
+      delete root.dataset.touchPressedUntil;
+    }
+  }, TOUCH_PRESS_EFFECT_MS + 40);
+}
+
+function completeNavigation(link) {
   const href = link.getAttribute("href");
+
   if (isLandingHref(href)) {
     markReturnToLanding();
   }
@@ -134,6 +162,22 @@ function navigateToLink(link) {
   }
 
   location.href = link.href;
+}
+
+function queueNavigation(link, { touchFeedback = false } = {}) {
+  if (!link || navigationLocked) return;
+
+  navigationLocked = true;
+
+  if (touchFeedback) {
+    triggerTouchPressFeedback();
+    window.setTimeout(() => {
+      completeNavigation(link);
+    }, TOUCH_NAV_DELAY_MS);
+    return;
+  }
+
+  completeNavigation(link);
 }
 
 function installLinkBehavior() {
@@ -200,7 +244,7 @@ function installLinkBehavior() {
         }
 
         event.preventDefault();
-        navigateToLink(link);
+        queueNavigation(link, { touchFeedback: true });
       },
       { passive: false }
     );
@@ -225,7 +269,7 @@ function installLinkBehavior() {
     if (!link || navigationLocked) return;
 
     event.preventDefault();
-    navigateToLink(link);
+    queueNavigation(link);
   });
 }
 
@@ -236,7 +280,11 @@ window.addEventListener("pageshow", (event) => {
   }
 });
 
+window.addEventListener("resize", updateInputModeClass);
+
 async function boot() {
+  updateInputModeClass();
+
   const page = document.body.dataset.page || "landing";
   const source = document.getElementById("source");
   const screen = document.getElementById("ascii-screen");
