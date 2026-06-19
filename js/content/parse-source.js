@@ -2,16 +2,26 @@ function normalizeText(value) {
   return value.replace(/\s+/g, " ").trim();
 }
 
+function pushTextTokens(text, tokens, extra = {}) {
+  for (const word of text.split(" ")) {
+    if (!word) continue;
+    tokens.push({ type: "text", text: word, ...extra });
+  }
+}
+
+function pushLinkTokens(text, tokens, extra = {}) {
+  for (const word of text.split(" ")) {
+    if (!word) continue;
+    tokens.push({ type: "link", text: word, ...extra });
+  }
+}
+
 function parseInline(node, tokens = []) {
   for (const child of node.childNodes) {
     if (child.nodeType === Node.TEXT_NODE) {
-    const text = normalizeText(child.textContent || "");
-    if (text) {
-        for (const word of text.split(" ")) {
-        if (word) tokens.push({ type: "text", text: word });
-        }
-    }
-    continue;
+      const text = normalizeText(child.textContent || "");
+      if (text) pushTextTokens(text, tokens);
+      continue;
     }
 
     if (child.nodeType !== Node.ELEMENT_NODE) continue;
@@ -24,9 +34,7 @@ function parseInline(node, tokens = []) {
     if (child.tagName === "A") {
       const text = normalizeText(child.textContent || "");
       if (text) {
-        tokens.push({
-          type: "link",
-          text,
+        pushLinkTokens(text, tokens, {
           href: child.getAttribute("href") || "#",
           target: child.getAttribute("target") || ""
         });
@@ -48,6 +56,7 @@ export function parseSource(root) {
       for (const nested of child.children) {
         const tokens = parseInline(nested, []);
         if (!tokens.length) continue;
+
         blocks.push({
           tag: nested.tagName,
           tokens,
