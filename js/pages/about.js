@@ -16,7 +16,7 @@ const ABOUT_LAYOUT = {
   desktop: {
     textMaxWidth: 66,
     textOffsetCols: 0,
-    textOffsetRows: 0,
+    textOffsetRows: -4,
     objectAnchorText: "back",
     objectOffsetXCols: 0,
     objectOffsetYRows: 2,

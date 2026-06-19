@@ -1,22 +1,64 @@
 {
   "projects": [
     {
-      "title": "→ surveillance atlas",
+      "title": "→ hostile environments",
       "year": "2026",
-      "summary": "critical mapping and interface study",
-      "href": "./projects/surveillance-atlas.html"
+      "summary": "investigating the ‘hostile environment’ online, how right-wing networks manufacture false narratives",
+      "href": "https://tomaswallage.github.io/NELT_CIJ_Investigation/"
     },
     {
-      "title": "→ ascii field studies",
+      "title": "→ noisy infrastructures?",
       "year": "2026",
-      "summary": "interactive typographic experiments",
-      "href": "./projects/ascii-field-studies.html"
+      "summary": "exploring noise exposure in southwark, questionning inequality around deprivation",
+      "href": "./projects/....html"
     },
     {
-      "title": "→ infrastructure traces",
+      "title": "→ machine (un)learning",
+      "year": "2026",
+      "summary": "drawing comparisons between ml and eugenics, questionning the intentions of technofeudal leaders",
+      "href": "./projects/....html"
+    },
+    {
+      "title": "→ copycat",
       "year": "2025",
-      "summary": "data visualisation and archival research",
-      "href": "./projects/infrastructure-traces.html"
+      "summary": "measuring mimicry and the chameleon effect through emg sensing, visualised through a responsive metaball gui",
+      "href": "./projects/....html"
+    },
+    {
+      "title": "→ making a wave",
+      "year": "2025",
+      "summary": "building a mechanism that measures the response wave freqency has on wave amplitude in water",
+      "href": "./projects/....html"
+    },
+    {
+      "title": "→ fella's archive",
+      "year": "2025",
+      "summary": "100 years in the future, an anthroplogist stumbles across a masoleum and builds an idea of it's creator based on the remanince - maybe to the creator's contempt",
+      "href": "./projects/....html"
+    },
+    {
+      "title": "→ tfl futures thinking",
+      "year": "2025",
+      "summary": "how does the future of wayfinding look for londoner's? a project in collaboration with tfl",
+      "href": "./projects/....html"
+    },
+    {
+      "title": "→ chronoception",
+      "year": "2025",
+      "summary": "a short film based around henri berson's concept of 'duration' and time distortion through emotional experience",
+      "href": "./projects/....html"
+    },
+    {
+      "title": "→ box",
+      "year": "2024",
+      "summary": "who really controls censorship, survailance and privacy, and who watches the watchers",
+      "href": "./projects/....html"
+    },
+    {
+      "title": "→ panasonic",
+      "year": "2024",
+      "summary": "an advert for panasonic, that brings a declining company into the modern age",
+      "href": "./projects/....html"
     }
   ]
 }

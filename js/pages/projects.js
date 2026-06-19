@@ -26,9 +26,9 @@ const PROJECTS_LAYOUT = {
     dropChance: 0.07
   },
   mobile: {
-    textMaxWidth: 34,
+    textMaxWidth: 44,
     textOffsetCols: 0,
-    textOffsetRows: -2,
+    textOffsetRows: 0,
     rowStaggerMs: 46,
     scrambleDurationMs: 220,
     glitchStepMs: 48,
