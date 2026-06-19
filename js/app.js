@@ -296,9 +296,9 @@ async function boot() {
       await runAsciiPreloader({
         element: loader,
         marks: [LOADER_DESKTOP, LOADER_TABLET, LOADER_MOBILE],
-        duration: 1350,
-        hold: 160,
-        fade: 480,
+        duration: 1150,
+        hold: 960,
+        fade: 580,
         unrevealedChar: "."
       });
 
