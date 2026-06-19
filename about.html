@@ -7,19 +7,29 @@
     <link rel="stylesheet" href="./css/base.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/about.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/"
+        }
+      }
+    </script>
   </head>
   <body data-page="about">
     <a class="skip-link" href="#source">Skip to content</a>
 
-    <main class="source" id="source">
-      <div><a>aboutMe</a></div>
-      <div><a href="./index.html">back</a></div>
-      <div>Lucas Grant is a designer-developer building interfaces, tools, and research-led visual systems.</div>
-      <div>This scaffold keeps the site semantic in HTML and renders it through a shared ASCII engine so the interaction logic can expand across later pages.</div>
-      <div><a href="mailto:hello@example.com">hello@example.com</a></div>
+    <main id="source" class="source" aria-label="About content">
+      <a>about</a>
+      <p><a href="./index.html">back</a></p>
+      <p>I am a Creative Technologist and Graphic Designer who believes the best visual experiences are also interactive ones.</p>
+      <p>With a degree in [Degree Name] from [University] and [Number]+ years of agency experience, I specialize in bringing brands to life through code, motion, and striking visuals.</p>
+      <p>Whether I'm designing a sleek UI/UX interface or writing shaders for an immersive environment, my goal is always to push the boundaries of what design can do.</p>
+      <p><a href="mailto:hello@example.com">hello@example.com</a></p>
     </main>
 
     <pre class="ascii-screen" id="ascii-screen" aria-hidden="true"></pre>
+    <div class="about-inline-object" id="about-inline-object" aria-hidden="true"></div>
 
     <script type="module" src="./js/app.js"></script>
   </body>

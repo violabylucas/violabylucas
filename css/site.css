@@ -47,3 +47,28 @@ pre.ascii-screen > span {
 pre.ascii-screen a {
   color: rgba(255, 255, 255, 0.95);
 }
+
+pre.ascii-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--color-bg);
+  color: rgba(255, 255, 255, 0.92);
+  font: inherit;
+  line-height: inherit;
+  white-space: pre;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 480ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+pre.ascii-loader.is-hidden {
+  opacity: 0;
+}

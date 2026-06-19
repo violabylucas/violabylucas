@@ -3,6 +3,39 @@ body[data-page="about"] {
   --line-height: 19px;
 }
 
+body[data-page="about"] .about-inline-object {
+  position: absolute;
+  z-index: 5;
+  overflow: hidden;
+  pointer-events: auto;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+body[data-page="about"] .about-inline-object,
+body[data-page="about"] .about-inline-object > div,
+body[data-page="about"] .about-inline-object table,
+body[data-page="about"] .about-inline-object tbody,
+body[data-page="about"] .about-inline-object tr,
+body[data-page="about"] .about-inline-object td,
+body[data-page="about"] .about-inline-object canvas,
+body[data-page="about"] .about-inline-object pre {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+body[data-page="about"] .about-inline-object pre {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-family: var(--font-mono);
+  line-height: 0.72;
+  letter-spacing: 0.02em;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 @media (max-width: 760px) {
   body[data-page="about"] {
     --font-size: 12.5px;

@@ -2,9 +2,33 @@ import { layoutContent } from "../content/layout-source.js";
 import { parseSource } from "../content/parse-source.js";
 import { stampRuns } from "../content/stamp-text.js";
 import { applyGlyphCycle } from "../effects/glyph-cycler.js";
-import { ensureInteractionStore, updateInteractionField, disturbTextCell } from "../effects/interaction-field.js";
+import {
+  ensureInteractionStore,
+  updateInteractionField,
+  disturbTextCell
+} from "../effects/interaction-field.js";
 import { COLORS } from "../effects/palette.js";
 import { sampleWordField } from "../effects/word-field.js";
+
+const PROJECTS_LAYOUT = {
+  breakpointCols: 72,
+  desktop: {
+    textMaxWidth: 66,
+    textOffsetCols: 0,
+    textOffsetRows: 0
+  },
+  mobile: {
+    textMaxWidth: 34,
+    textOffsetCols: 0,
+    textOffsetRows: -2
+  }
+};
+
+function getLayoutSettings(state) {
+  return state.cols < PROJECTS_LAYOUT.breakpointCols
+    ? PROJECTS_LAYOUT.mobile
+    : PROJECTS_LAYOUT.desktop;
+}
 
 async function injectProjects(source) {
   const mount = source.querySelector("[data-projects-root]");
@@ -16,9 +40,27 @@ async function injectProjects(source) {
 
   data.projects.forEach((project) => {
     const div = document.createElement("div");
-    div.innerHTML = `<a href="${project.href}">${project.title}</a> — ${project.year} — ${project.summary}`;
+    div.innerHTML = `<a href="${project.href}">${project.title} — ${project.year} — ${project.summary}</a>`;
     mount.appendChild(div);
   });
+}
+
+function buildProjectRuns(state, context) {
+  const layout = getLayoutSettings(state);
+
+  const maxWidth = Math.min(
+    state.cols - 4,
+    layout.textMaxWidth
+  );
+
+  return layoutContent(context.blocks, state.cols, state.rows, {
+    mode: "stack",
+    maxWidth
+  }).map((run) => ({
+    ...run,
+    x: run.x + layout.textOffsetCols,
+    y: run.y + layout.textOffsetRows
+  }));
 }
 
 export async function createProjectsPage({ source }) {
@@ -48,10 +90,7 @@ export async function createProjectsPage({ source }) {
       return sampleWordField(cell.x, cell.y, state);
     },
     overlay(state, input, buffer, context) {
-      const runs = layoutContent(context.blocks, state.cols, state.rows, {
-        mode: "stack",
-        maxWidth: 72
-      });
+      const runs = buildProjectRuns(state, context);
 
       stampRuns(buffer, state.cols, state.rows, runs);
 
@@ -61,7 +100,14 @@ export async function createProjectsPage({ source }) {
           const y = run.y;
           if (x < 0 || x >= state.cols || y < 0 || y >= state.rows) continue;
           const index = x + y * state.cols;
-          disturbTextCell(context.effectCells[index], x, y, state, input, context.interaction);
+          disturbTextCell(
+            context.effectCells[index],
+            x,
+            y,
+            state,
+            input,
+            context.interaction
+          );
         }
       }
 
