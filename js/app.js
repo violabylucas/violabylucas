@@ -13,6 +13,11 @@ const factories = {
 const PRELOADER_KEY = "violabylucas-preloader-seen";
 const RETURN_TO_LANDING_KEY = "violabylucas-return-to-landing";
 
+const TOUCH_TAP_THRESHOLD_PX = 12;
+const NAVIGATION_UNLOCK_MS = 400;
+
+let navigationLocked = false;
+
 const LOADER_DESKTOP = String.raw`
      ██╗   ██╗██╗ ██████╗ ██╗      █████╗    ██████╗ ██╗   ██╗   ██╗     ██╗   ██╗ ██████╗ █████╗ ███████╗
     ██║   ██║██║██╔═══██╗██║     ██╔══██╗   ██╔══██╗╚██╗ ██╔╝   ██║     ██║   ██║██╔════╝██╔══██╗██╔════╝
@@ -110,28 +115,103 @@ function shouldRunPreloader(page) {
   return !hasSeenPreloader();
 }
 
+function navigateToLink(link) {
+  if (!link || navigationLocked) return;
+
+  navigationLocked = true;
+
+  const href = link.getAttribute("href");
+  if (isLandingHref(href)) {
+    markReturnToLanding();
+  }
+
+  if (link.target === "_blank") {
+    window.open(link.href, "_blank", "noopener,noreferrer");
+    window.setTimeout(() => {
+      navigationLocked = false;
+    }, NAVIGATION_UNLOCK_MS);
+    return;
+  }
+
+  location.href = link.href;
+}
+
 function installLinkBehavior() {
   if ("ontouchstart" in window) {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let activeTouchLink = null;
+    let activeTouchMoved = false;
+
     document.addEventListener(
       "touchstart",
       (event) => {
+        if (navigationLocked) return;
+
         const link = event.target.closest("a[href]");
+        activeTouchLink = link;
+        activeTouchMoved = false;
+
         if (!link) return;
 
-        const href = link.getAttribute("href");
-        if (isLandingHref(href)) {
-          markReturnToLanding();
+        const touch = event.changedTouches[0];
+        if (!touch) return;
+
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+      },
+      { passive: true }
+    );
+
+    document.addEventListener(
+      "touchmove",
+      (event) => {
+        if (!activeTouchLink) return;
+
+        const touch = event.changedTouches[0];
+        if (!touch) return;
+
+        const dx = Math.abs(touch.clientX - touchStartX);
+        const dy = Math.abs(touch.clientY - touchStartY);
+
+        if (dx > TOUCH_TAP_THRESHOLD_PX || dy > TOUCH_TAP_THRESHOLD_PX) {
+          activeTouchMoved = true;
+        }
+      },
+      { passive: true }
+    );
+
+    document.addEventListener(
+      "touchend",
+      (event) => {
+        const link = activeTouchLink;
+        activeTouchLink = null;
+
+        if (!link || navigationLocked || activeTouchMoved) return;
+
+        const touch = event.changedTouches[0];
+        if (touch) {
+          const dx = Math.abs(touch.clientX - touchStartX);
+          const dy = Math.abs(touch.clientY - touchStartY);
+
+          if (dx > TOUCH_TAP_THRESHOLD_PX || dy > TOUCH_TAP_THRESHOLD_PX) {
+            return;
+          }
         }
 
         event.preventDefault();
-
-        if (link.target === "_blank") {
-          window.open(link.href, "_blank", "noopener,noreferrer");
-        } else {
-          location.href = link.href;
-        }
+        navigateToLink(link);
       },
       { passive: false }
+    );
+
+    document.addEventListener(
+      "touchcancel",
+      () => {
+        activeTouchLink = null;
+        activeTouchMoved = false;
+      },
+      { passive: true }
     );
 
     return;
@@ -139,22 +219,13 @@ function installLinkBehavior() {
 
   document.addEventListener("mousedown", (event) => {
     if (event.button !== 0) return;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
     const link = event.target.closest("a[href]");
-    if (!link) return;
-
-    const href = link.getAttribute("href");
-    if (isLandingHref(href)) {
-      markReturnToLanding();
-    }
+    if (!link || navigationLocked) return;
 
     event.preventDefault();
-
-    if (link.target === "_blank") {
-      window.open(link.href, "_blank", "noopener,noreferrer");
-    } else {
-      location.href = link.href;
-    }
+    navigateToLink(link);
   });
 }
 
@@ -201,6 +272,5 @@ async function boot() {
   installLinkBehavior();
   engine.start();
 }
-
 
 boot();
