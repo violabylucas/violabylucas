@@ -72,7 +72,7 @@ async function injectProjects(source) {
 
   data.projects.forEach((project) => {
     const div = document.createElement("div");
-    div.innerHTML = `<a href="${project.href}">${project.title} — ${project.year} — ${project.summary}</a>`;
+    div.innerHTML = `<a href="${project.href}">${project.title}</a> — ${project.year} — ${project.summary}`;
     mount.appendChild(div);
   });
 }
@@ -228,15 +228,16 @@ export async function createProjectsPage({ source }) {
 
           if (x < 0 || x >= state.cols || y < 0 || y >= state.rows) continue;
 
-          const index = x + y * state.cols;
-          disturbTextCell(
-            context.effectCells[index],
-            x,
-            y,
-            state,
-            input,
-            context.interaction
-          );
+        const index = x + y * state.cols;
+        disturbTextCell(
+        context.effectCells[index],
+        x,
+        y,
+        state,
+        input,
+        context.interaction,
+        buffer[index]
+        );
         }
       }
 

@@ -9,6 +9,7 @@ export function writeRun(buffer, cols, rows, run) {
   for (let index = 0; index < text.length; index += 1) {
     const col = x + index;
     if (col < 0 || col >= cols) continue;
+
     const cell = buffer[col + y * cols];
     cell.char = text[index];
     cell.baseChar = text[index];
@@ -16,6 +17,8 @@ export function writeRun(buffer, cols, rows, run) {
     cell.href = href;
     cell.target = target;
     cell.weight = weight || cell.weight;
+    cell.isInteractive = Boolean(href);
+
     if (index === 0 && linkOpen) cell.l = linkOpen;
     if (index === text.length - 1 && href) cell.u = "</a>";
   }

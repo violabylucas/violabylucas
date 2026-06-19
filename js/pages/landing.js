@@ -44,7 +44,15 @@ export async function createLandingPage({ source }) {
           const y = run.y;
           if (x < 0 || x >= state.cols || y < 0 || y >= state.rows) continue;
           const index = x + y * state.cols;
-          disturbTextCell(context.effectCells[index], x, y, state, input, context.interaction);
+          disturbTextCell(
+            context.effectCells[index],
+            x,
+            y,
+            state,
+            input,
+            context.interaction,
+            buffer[index]
+          );
         }
       }
 

@@ -1,6 +1,18 @@
 import { clamp } from "../core/utils.js";
 import { GLYPH_INDEX } from "./palette.js";
 
+function isTouchUI() {
+  return typeof document !== "undefined" &&
+    document.documentElement.classList.contains("touch-ui");
+}
+
+function hasRecentTouchPress() {
+  if (typeof document === "undefined") return false;
+
+  const until = Number(document.documentElement.dataset.touchPressedUntil || 0);
+  return until > performance.now();
+}
+
 export function ensureInteractionStore(context, length) {
   if (!Array.isArray(context.effectCells)) context.effectCells = [];
   while (context.effectCells.length < length) {
@@ -12,6 +24,7 @@ export function ensureInteractionStore(context, length) {
 export function updateInteractionField(state, input, context) {
   if (!context.interaction) context.interaction = { radiusSquared: 0, energy: 0 };
   const interaction = context.interaction;
+
   const dx = input.x - input.q.x;
   const dy = input.y - input.q.y;
   const speed = Math.sqrt(dx * dx + dy * dy);
@@ -25,12 +38,20 @@ export function updateInteractionField(state, input, context) {
   return interaction;
 }
 
-export function disturbTextCell(cellState, x, y, state, input, interaction) {
+export function disturbTextCell(cellState, x, y, state, input, interaction, cellMeta = null) {
+  const touchUI = isTouchUI();
+  const touchPressActive = hasRecentTouchPress();
+  const isInteractive = Boolean(cellMeta?.isInteractive);
+
   const dx = (x - input.x) * state.m.aspect;
   const dy = y - input.y;
   const distanceSquared = dx * dx + dy * dy;
 
   cellState.fade *= 0.95;
+
+  if (touchUI && isInteractive && !touchPressActive) {
+    return distanceSquared;
+  }
 
   if (distanceSquared < interaction.radiusSquared) {
     cellState.glyphPointer = (GLYPH_INDEX[" "] || 0) + Math.floor(interaction.radiusSquared - distanceSquared);
