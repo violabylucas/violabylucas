@@ -33,7 +33,9 @@ export function createCell(defaults = {}) {
     baseChar: "",
     href: "",
     target: "",
-    text: false
+    text: false,
+    tone: "",
+    isInteractive: false
   };
 }
 
@@ -48,6 +50,8 @@ export function resetCell(cell, defaults = {}) {
   cell.href = "";
   cell.target = "";
   cell.text = false;
+  cell.tone = "";
+  cell.isInteractive = false;
   return cell;
 }
 

@@ -1,5 +1,14 @@
 export function writeRun(buffer, cols, rows, run) {
-  const { x, y, text, href = "", target = "", weight = "400" } = run;
+  const {
+    x,
+    y,
+    text,
+    href = "",
+    target = "",
+    weight = "400",
+    tone = ""
+  } = run;
+
   if (y < 0 || y >= rows) return;
 
   const linkOpen = href
@@ -17,6 +26,7 @@ export function writeRun(buffer, cols, rows, run) {
     cell.href = href;
     cell.target = target;
     cell.weight = weight || cell.weight;
+    cell.tone = tone;
     cell.color = href ? "#ffffff" : "rgb(255 255 255 / 0.68)";
     cell.isInteractive = Boolean(href);
 

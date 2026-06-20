@@ -5,7 +5,7 @@ const GLITCH_TINTS = [
   "hsla(103, 36%, 90%, 0.82)",
   "rgba(237, 222, 231, 0.78)",
   "rgba(240, 238, 233, 0.76)",
-  "rgba(235, 58, 255, 0.79)"
+  "rgba(235, 58, 255, 0.72)"
 ];
 
 function pickGlitchTint(index, pointer) {
@@ -26,8 +26,6 @@ export function applyGlyphCycle(buffer, context) {
     const state = states[index];
     if (!state) continue;
 
-    const isInteractive = Boolean(cell.isInteractive || cell.href);
-
     if (state.anim === 1) {
       const targetIndex = GLYPH_INDEX[cell.baseChar] ?? GLYPH_INDEX[" "] ?? 0;
 
@@ -40,6 +38,13 @@ export function applyGlyphCycle(buffer, context) {
       }
     } else {
       cell.char = cell.baseChar;
+    }
+
+    const isInteractive = Boolean(cell.isInteractive || cell.href);
+
+    if (cell.tone === "selected") {
+      cell.color = state.fade > 0.12 ? COLORS.selectedActive : COLORS.selectedIdle;
+      continue;
     }
 
     if (!reduceMotion && (state.anim === 1 || state.fade > 0.65)) {

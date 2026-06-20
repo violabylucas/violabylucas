@@ -10,8 +10,10 @@ export const FIELD_B = " ·-•~+:*abcXYZ*".split("");
 export const COLORS = {
   base: "rgba(255,255,255,0.46)",
   dim: "rgba(255,255,255,0.34)",
-  link: "rgba(255,255,255,0.98)",
+  link: "rgba(255,255,255,0.95)",
   linkIdle: "rgba(255,255,255,0.92)",
   textActive: "rgba(255,255,255,0.78)",
-  textIdle: "rgba(255,255,255,0.50)"
+  textIdle: "rgba(255,255,255,0.50)",
+  selectedActive: "rgba(196,182,255,0.74)",
+  selectedIdle: "rgba(172,156,255,0.42)"
 };
