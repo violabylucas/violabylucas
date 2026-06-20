@@ -27,10 +27,11 @@ const PROJECTS_LAYOUT = {
     jitterDurationMs: 150,
     dropChance: 0.07,
     hoverPreviewOpacity: 0.52,
-    hoverPreviewMinWidthPx: 380,
-    hoverPreviewMaxWidthPx: 620,
-    hoverPreviewAspectRatio: 0.68,
+    hoverPreviewMinWidthPx: 420,
+    hoverPreviewMaxWidthPx: 1920,
+    hoverPreviewMaxHeightVh: 0.82,
     hoverPreviewPaddingPx: 18,
+    hoverPreviewObjectFit: "contain",
     hoverPreviewObjectPositionX: "50%",
     hoverPreviewObjectPositionY: "50%"
   },
@@ -53,8 +54,10 @@ const PROJECTS_LAYOUT = {
     detailThumbColsWide: 12,
     detailThumbColsNarrow: 10,
     detailThumbRows: 8,
+    detailMinThumbRows: 5,
     detailSummaryMinWidth: 14,
     detailSummaryMaxLines: 10,
+    detailMediaObjectFit: "contain",
     titleMaxLines: 2,
     stackDetailBelowCols: 34
   }
@@ -166,26 +169,36 @@ function buildAsciiFrame(width, height) {
   return rows;
 }
 
-function getMobileDetailMetrics(maxWidth) {
-  const layout = PROJECTS_LAYOUT.mobile;
-  let thumbCols =
-    maxWidth >= 40 ? layout.detailThumbColsWide : layout.detailThumbColsNarrow;
-
-  const gapCols = layout.detailGapCols;
-  let summaryWidth = maxWidth - thumbCols - gapCols;
-
-  if (summaryWidth < layout.detailSummaryMinWidth) {
-    thumbCols = Math.max(8, maxWidth - gapCols - layout.detailSummaryMinWidth);
-    summaryWidth = maxWidth - thumbCols - gapCols;
+function parseAspectRatioValue(value) {
+  if (typeof value === "number" && Number.isFinite(value) && value > 0) {
+    return value;
   }
 
-  return {
-    thumbCols,
-    thumbRows: layout.detailThumbRows,
-    gapCols,
-    summaryWidth: Math.max(layout.detailSummaryMinWidth, summaryWidth),
-    summaryMaxLines: layout.detailSummaryMaxLines
-  };
+  if (typeof value !== "string") return null;
+
+  const normalized = value.trim();
+  if (!normalized) return null;
+
+  const numeric = Number(normalized);
+  if (Number.isFinite(numeric) && numeric > 0) {
+    return numeric;
+  }
+
+  const match = normalized.match(/^(\d+(?:\.\d+)?)\s*[:/x]\s*(\d+(?:\.\d+)?)$/i);
+  if (!match) return null;
+
+  const width = Number(match[1]);
+  const height = Number(match[2]);
+
+  if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) {
+    return null;
+  }
+
+  return width / height;
+}
+
+function getProjectAspectRatio(project, fallback = 16 / 9) {
+  return parseAspectRatioValue(project?.thumbnailAspectRatio) || fallback;
 }
 
 function getThumbnailSrc(project) {
@@ -291,7 +304,7 @@ function buildDesktopProjectRuns(state, context) {
   return runs;
 }
 
-function measureOpenProjectDetail(project, maxWidth) {
+function measureOpenProjectDetail(project, maxWidth, metrics) {
   const layout = PROJECTS_LAYOUT.mobile;
   const gapCols = layout.detailGapCols;
   const usableWidth = Math.max(0, maxWidth - gapCols);
@@ -314,16 +327,16 @@ function measureOpenProjectDetail(project, maxWidth) {
     layout.detailSummaryMaxLines
   );
 
-  const rowRatio =
-    typeof project.thumbnailRowRatio === "number" && project.thumbnailRowRatio > 0
-      ? project.thumbnailRowRatio
-      : 0.3;
+  const aspectRatio = getProjectAspectRatio(project, 16 / 9);
+  const innerCols = Math.max(1, thumbCols - 2);
 
-  const imageInnerCols = Math.max(1, thumbCols - 2);
-  const thumbRows = Math.max(
-    5,
-    Math.round(imageInnerCols * rowRatio) + 2
-  );
+  const charWidth = Math.max(1, metrics?.charWidth || 1);
+  const lineHeight = Math.max(1, metrics?.lineHeight || 1);
+
+  const innerWidthPx = innerCols * charWidth;
+  const innerHeightPx = innerWidthPx / aspectRatio;
+  const innerRows = Math.max(1, Math.round(innerHeightPx / lineHeight));
+  const thumbRows = Math.max(layout.detailMinThumbRows, innerRows + 2);
 
   const frameLines = buildAsciiFrame(thumbCols, thumbRows);
   const detailRows = Math.max(summaryLines.length + 1, frameLines.length);
@@ -411,7 +424,7 @@ function buildMobileProjectRuns(state, context) {
     yCursor += 1;
 
     if (isOpen) {
-      const detail = measureOpenProjectDetail(project, maxWidth);
+      const detail = measureOpenProjectDetail(project, maxWidth, state.m);
       const detailStartY = yCursor;
       const textX = xBase;
       const boxX = xBase + detail.summaryWidth + detail.gapCols;
@@ -600,6 +613,8 @@ function ensureInlineMediaNode(context, mediaBox) {
   }
 
   node.className = "projects-inline-media__asset";
+  node.style.objectFit = PROJECTS_LAYOUT.mobile.detailMediaObjectFit;
+  node.style.objectPosition = "center center";
   mount.appendChild(node);
 
   context.inlineMediaKey = key;
@@ -671,6 +686,7 @@ function ensureHoverPreviewNode(context, project, src) {
   }
 
   node.className = "projects-hover-preview__asset";
+  node.style.objectFit = PROJECTS_LAYOUT.desktop.hoverPreviewObjectFit;
   mount.appendChild(node);
 
   context.hoverPreviewKey = key;
@@ -711,8 +727,29 @@ function syncHoverPreview(context, state) {
       `${layout.hoverPreviewObjectPositionX} ${layout.hoverPreviewObjectPositionY}`;
   }
 
-  const width = Math.round(clamp(window.innerWidth * 0.82, 420, 1920));
-  const height = Math.round(width * 0.5625);
+  const aspectRatio = getProjectAspectRatio(project, 16 / 9);
+
+  let width = Math.round(
+    clamp(
+      window.innerWidth * 0.82,
+      layout.hoverPreviewMinWidthPx,
+      layout.hoverPreviewMaxWidthPx
+    )
+  );
+  let height = Math.round(width / aspectRatio);
+
+  const maxHeight = Math.round(window.innerHeight * layout.hoverPreviewMaxHeightVh);
+  if (height > maxHeight) {
+    height = maxHeight;
+    width = Math.round(height * aspectRatio);
+  }
+
+  const maxViewportWidth = Math.round(window.innerWidth * 0.92);
+  if (width > maxViewportWidth) {
+    width = maxViewportWidth;
+    height = Math.round(width / aspectRatio);
+  }
+
   const left = Math.round((window.innerWidth - width) / 2);
   const top = Math.round((window.innerHeight - height) / 2);
 

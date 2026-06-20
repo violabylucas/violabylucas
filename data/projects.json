@@ -5,70 +5,80 @@
       "year": "2026",
       "summary": "investigating the ‘hostile environment’ online, and how right-wing networks manufacture false narratives",
       "href": "https://tomaswallage.github.io/NELT_CIJ_Investigation/",
-      "thumbnail": "./data/thumbnails/Weirdcomp copy - Copy.png"
+      "thumbnail": "./data/thumbnails/hostile-environments-thumbnail.mp4",
+      "thumbnailAspectRatio": "1.899864682"
     },
     {
       "title": "→ noisy infrastructures?",
       "year": "2026",
       "summary": "exploring noise exposure in southwark, questioning inequality around deprivation",
       "href": "./projects/....html",
-      "thumbnail": "./data/thumbnails/Weirdcomp copy - Copy.png"
+      "thumbnail": "./data/thumbnails/noisy-infrastructures-thumbnail.mp4",
+      "thumbnailAspectRatio": ""
     },
     {
       "title": "→ machine (un)learning",
       "year": "2026",
       "summary": "drawing comparisons between ML and eugenics, questioning the intentions of technofeudal leaders",
       "href": "./projects/....html",
-      "thumbnail": "./data/thumbnails/Weirdcomp copy - Copy.png"
+      "thumbnail": "./data/thumbnails/machine-unlearning-thumbnail.mp4",
+      "thumbnailAspectRatio": ""
     },
     {
       "title": "→ copycat",
       "year": "2025",
       "summary": "measuring mimicry and the chameleon effect through emg sensing, visualised through a responsive metaball gui",
       "href": "./projects/....html",
-      "thumbnail": "./data/thumbnails/Weirdcomp copy - Copy.png"
+      "thumbnail": "./data/thumbnails/copycat-thumbnail.mp4",
+      "thumbnailAspectRatio": ""
     },
     {
       "title": "→ making a wave",
       "year": "2025",
       "summary": "building a mechanism that measures the effect wave frequency has on wave amplitude in water",
       "href": "./projects/....html",
-      "thumbnail": "./data/thumbnails/Weirdcomp copy - Copy.png"
+      "thumbnail": "./data/thumbnails/making-a-wave-thumbnail.mp4",
+      "thumbnailAspectRatio": ""
     },
     {
       "title": "→ fella's archive",
       "year": "2025",
       "summary": "100 years in the future, an anthropologist stumbles across a mausoleum and builds an idea of its creator based on the remains — maybe to the creator's contempt",
       "href": "./projects/....html",
-      "thumbnail": "./data/thumbnails/Weirdcomp copy - Copy.png"
+      "thumbnail": "./data/thumbnails/fellas-archive-thumbnail.webp",
+      "thumbnailAspectRatio": ""
     },
     {
       "title": "→ tfl futures thinking",
       "year": "2025",
       "summary": "what might the future of wayfinding look like for londoners? a project in collaboration with tfl",
       "href": "./projects/....html",
-      "thumbnail": "./data/thumbnails/Weirdcomp copy - Copy.png"
+      "thumbnail": "./data/thumbnails/tfl-futures-thinking-thumbnail.mp4",
+      "thumbnailAspectRatio": ""
     },
     {
       "title": "→ chronoception",
       "year": "2025",
       "summary": "a short film based around henri bergson's concept of 'duration' and time distortion through emotional experience",
       "href": "./projects/....html",
-      "thumbnail": "./data/thumbnails/Weirdcomp copy - Copy.png"
+      "thumbnail": "./data/thumbnails/chronoception-thumbnail.mp4",
+      "thumbnailAspectRatio": ""
     },
     {
       "title": "→ box",
       "year": "2024",
       "summary": "who really controls censorship, surveillance and privacy, and who watches the watchers",
       "href": "./projects/....html",
-      "thumbnail": "./data/thumbnails/Weirdcomp copy - Copy.png"
+      "thumbnail": "./data/thumbnails/box-thumbnail.webp",
+      "thumbnailAspectRatio": ""
     },
     {
       "title": "→ panasonic",
       "year": "2024",
       "summary": "an advert for panasonic that brings a declining company into the modern age",
       "href": "./projects/....html",
-      "thumbnail": "./data/thumbnails/Weirdcomp copy - Copy.png"
+      "thumbnail": "./data/thumbnails/panasonic-thumbnail.mp4",
+      "thumbnailAspectRatio": ""
     }
   ]
 }
