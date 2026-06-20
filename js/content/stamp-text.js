@@ -17,6 +17,7 @@ export function writeRun(buffer, cols, rows, run) {
     cell.href = href;
     cell.target = target;
     cell.weight = weight || cell.weight;
+    cell.color = href ? "#ffffff" : "rgb(255 255 255 / 0.68)";
     cell.isInteractive = Boolean(href);
 
     if (index === 0 && linkOpen) cell.l = linkOpen;
