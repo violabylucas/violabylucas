@@ -35,9 +35,9 @@ const PROJECTS_LAYOUT = {
     hoverPreviewObjectPositionY: "50%"
   },
   mobile: {
-    textMaxWidth: 33,
+    textMaxWidth: 40,
     textOffsetCols: 0,
-    textOffsetRows: -3,
+    textOffsetRows: -6,
     rowGap: 2,
     topPaddingRows: 3,
     tapThresholdPx: 12,
@@ -54,7 +54,9 @@ const PROJECTS_LAYOUT = {
     detailThumbColsNarrow: 10,
     detailThumbRows: 8,
     detailSummaryMinWidth: 14,
-    detailSummaryMaxLines: 7
+    detailSummaryMaxLines: 10,
+    titleMaxLines: 2,
+    stackDetailBelowCols: 34
   }
 };
 
@@ -290,18 +292,48 @@ function buildDesktopProjectRuns(state, context) {
 }
 
 function measureOpenProjectDetail(project, maxWidth) {
-  const metrics = getMobileDetailMetrics(maxWidth);
+  const layout = PROJECTS_LAYOUT.mobile;
+  const gapCols = layout.detailGapCols;
+  const usableWidth = Math.max(0, maxWidth - gapCols);
+
+  let thumbCols = Math.max(
+    layout.detailThumbColsNarrow + 2,
+    Math.ceil(usableWidth * 0.52)
+  );
+
+  let summaryWidth = maxWidth - thumbCols - gapCols;
+
+  if (summaryWidth < layout.detailSummaryMinWidth) {
+    summaryWidth = layout.detailSummaryMinWidth;
+    thumbCols = Math.max(10, maxWidth - gapCols - summaryWidth);
+  }
+
   const summaryLines = wrapText(
     project.summary || "",
-    metrics.summaryWidth,
-    metrics.summaryMaxLines
+    summaryWidth,
+    layout.detailSummaryMaxLines
   );
-  const frameLines = buildAsciiFrame(metrics.thumbCols, metrics.thumbRows);
-  const detailRows = Math.max(frameLines.length, summaryLines.length);
+
+  const rowRatio =
+    typeof project.thumbnailRowRatio === "number" && project.thumbnailRowRatio > 0
+      ? project.thumbnailRowRatio
+      : 0.3;
+
+  const imageInnerCols = Math.max(1, thumbCols - 2);
+  const thumbRows = Math.max(
+    5,
+    Math.round(imageInnerCols * rowRatio) + 2
+  );
+
+  const frameLines = buildAsciiFrame(thumbCols, thumbRows);
+  const detailRows = Math.max(summaryLines.length + 1, frameLines.length);
 
   return {
-    ...metrics,
+    gapCols,
+    summaryWidth,
     summaryLines,
+    thumbCols,
+    thumbRows,
     frameLines,
     detailRows
   };
@@ -406,9 +438,17 @@ function buildMobileProjectRuns(state, context) {
         });
       });
 
+      const textBottomY = detail.summaryLines.length
+        ? detailStartY + detail.summaryLines.length - 1
+        : detailStartY - 1;
+
+      const buttonY = textBottomY + 1;
+      const imageBottomY = detailStartY + detail.frameLines.length - 1;
+      const contentBottomY = Math.max(buttonY, imageBottomY);
+
       runs.push({
         x: textX,
-        y: detailStartY + detail.detailRows,
+        y: buttonY,
         text: "see project",
         href: project.href || "#",
         target: "",
@@ -428,7 +468,7 @@ function buildMobileProjectRuns(state, context) {
         };
       }
 
-      yCursor += detail.detailRows + 2;
+      yCursor = contentBottomY + 2;
     } else {
       yCursor += layout.rowGap - 1;
     }
@@ -743,10 +783,10 @@ function bindMobileProjectInteractions(context) {
     const y = upY / context.lastMetrics.lineHeight;
 
     const hit = (context.mobileHotspots || []).find((spot) => (
-      x >= spot.x1 &&
-      x <= spot.x2 &&
-      y >= spot.y - 0.5 &&
-      y <= spot.y + 0.5
+      x >= spot.x1 - 1.5 &&
+      x <= spot.x2 + 1.5 &&
+      y >= spot.y - 1 &&
+      y <= spot.y + 1
     ));
 
     if (!hit) return;
